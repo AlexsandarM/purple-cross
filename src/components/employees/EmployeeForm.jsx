@@ -16,6 +16,7 @@ function EmployeeForm({
   submitLabel = "Save",
   formError = "",
   submitTestId = "employee-form-submit-button",
+  disableCodeField = false,
 }) {
   const [values, setValues] = useState({
     ...EMPTY_VALUES,
@@ -60,6 +61,7 @@ function EmployeeForm({
             type="text"
             value={values.code}
             onChange={handleChange("code")}
+            disabled={disableCodeField}
             data-testid="employee-code-input"
           />
           {errors.code ? (
