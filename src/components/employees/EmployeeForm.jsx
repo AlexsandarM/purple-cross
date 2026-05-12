@@ -70,11 +70,6 @@ function EmployeeForm({
               {errors.code}
             </small>
           ) : null}
-          {!errors.code && disableCodeField && codeReadOnlyMessage ? (
-            <small className="field-help" data-testid="employee-code-help">
-              {codeReadOnlyMessage}
-            </small>
-          ) : null}
         </label>
 
         <label className="field" htmlFor="employee-full-name-input">
@@ -165,6 +160,12 @@ function EmployeeForm({
           ) : null}
         </label>
       </div>
+
+      {disableCodeField && codeReadOnlyMessage ? (
+        <p className="field-help employee-form-note" data-testid="employee-code-help">
+          {codeReadOnlyMessage}
+        </p>
+      ) : null}
 
       {formError ? (
         <p className="form-error-banner" data-testid="employee-form-error-banner">
