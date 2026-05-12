@@ -287,6 +287,31 @@ a {
   color: #374151;
 }
 
+.employee-details-card {
+  padding: 1.1rem;
+}
+
+.employee-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1.25rem;
+}
+
+.employee-details-item {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.employee-details-item p {
+  margin: 0;
+}
+
+.employee-details-label {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .navbar-inner {
     flex-direction: column;
@@ -294,6 +319,10 @@ a {
   }
 
   .employee-filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-details-grid {
     grid-template-columns: 1fr;
   }
 }
