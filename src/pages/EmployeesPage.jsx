@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import ConfirmDialog from "../components/common/ConfirmDialog";
 import EmployeeFilters from "../components/employees/EmployeeFilters";
 import EmployeeTable from "../components/employees/EmployeeTable";
 import PageHeader from "../components/common/PageHeader";
@@ -11,9 +12,29 @@ function EmployeesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [occupationFilter, setOccupationFilter] = useState("");
+  const [employeePendingDeleteCode, setEmployeePendingDeleteCode] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const handleDeleteEmployee = (code) => {
-    deleteEmployee(code);
+    setEmployeePendingDeleteCode(code);
+  };
+
+  const handleCancelDelete = () => {
+    setEmployeePendingDeleteCode("");
+  };
+
+  const handleConfirmDelete = () => {
+    if (!employeePendingDeleteCode) {
+      return;
+    }
+
+    const deleted = deleteEmployee(employeePendingDeleteCode);
+    if (deleted) {
+      setFeedbackMessage("Employee deleted successfully.");
+    } else {
+      setFeedbackMessage("Unable to delete employee. Please try again.");
+    }
+    setEmployeePendingDeleteCode("");
   };
 
   const handleClearFilters = () => {
@@ -66,6 +87,12 @@ function EmployeesPage() {
     });
   }, [departmentFilter, employees, occupationFilter, searchTerm]);
 
+  const pendingDeleteEmployee = useMemo(
+    () =>
+      employees.find((employee) => employee.code === employeePendingDeleteCode) ?? null,
+    [employees, employeePendingDeleteCode]
+  );
+
   return (
     <section className="page">
       <PageHeader
@@ -79,6 +106,7 @@ function EmployeesPage() {
               onClick={() => {
                 resetEmployees();
                 handleClearFilters();
+                setFeedbackMessage("Employee data reset to initial dataset.");
               }}
               data-testid="employees-reset-button"
             >
@@ -90,6 +118,19 @@ function EmployeesPage() {
           </div>
         }
       />
+      {feedbackMessage ? (
+        <div className="card feedback-banner" data-testid="employees-feedback-banner">
+          <p>{feedbackMessage}</p>
+          <button
+            type="button"
+            className="button button-secondary button-small"
+            onClick={() => setFeedbackMessage("")}
+            data-testid="employees-feedback-dismiss-button"
+          >
+            Dismiss
+          </button>
+        </div>
+      ) : null}
       <EmployeeFilters
         searchTerm={searchTerm}
         departmentFilter={departmentFilter}
@@ -105,6 +146,19 @@ function EmployeesPage() {
         employees={filteredEmployees}
         onDelete={handleDeleteEmployee}
         emptyStateMessage="No employees match the selected filters."
+      />
+      <ConfirmDialog
+        open={Boolean(employeePendingDeleteCode)}
+        title="Delete employee?"
+        message={
+          pendingDeleteEmployee
+            ? `Are you sure you want to delete ${pendingDeleteEmployee.fullName}?`
+            : "Are you sure you want to delete this employee?"
+        }
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
       />
     </section>
   );
