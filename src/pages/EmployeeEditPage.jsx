@@ -61,7 +61,14 @@ function EmployeeEditPage() {
     }
 
     setSubmitError("");
-    navigate(detailsPath);
+    navigate(detailsPath, {
+      state: {
+        toast: {
+          message: `${normalized.fullName} was updated successfully.`,
+          variant: "success",
+        },
+      },
+    });
     return {};
   };
 

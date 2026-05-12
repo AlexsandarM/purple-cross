@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ConfirmDialog from "../components/common/ConfirmDialog";
+import ToastMessage from "../components/common/ToastMessage";
 import EmployeeFilters from "../components/employees/EmployeeFilters";
 import EmployeeTable from "../components/employees/EmployeeTable";
 import PageHeader from "../components/common/PageHeader";
@@ -8,12 +9,38 @@ import { useEmployees } from "../hooks/useEmployees";
 import { APP_PATHS } from "../routes/paths";
 
 function EmployeesPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const { employees, deleteEmployee, resetEmployees } = useEmployees();
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [occupationFilter, setOccupationFilter] = useState("");
   const [employeePendingDeleteCode, setEmployeePendingDeleteCode] = useState("");
-  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    const locationToast = location.state?.toast;
+    if (!locationToast?.message) {
+      return;
+    }
+
+    setToast(locationToast);
+    navigate(location.pathname, { replace: true, state: {} });
+  }, [location.pathname, location.state, navigate]);
+
+  useEffect(() => {
+    if (!toast) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setToast(null);
+    }, 3500);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [toast]);
 
   const handleDeleteEmployee = (code) => {
     setEmployeePendingDeleteCode(code);
@@ -30,9 +57,12 @@ function EmployeesPage() {
 
     const deleted = deleteEmployee(employeePendingDeleteCode);
     if (deleted) {
-      setFeedbackMessage("Employee deleted successfully.");
+      setToast({ message: "Employee deleted successfully.", variant: "success" });
     } else {
-      setFeedbackMessage("Unable to delete employee. Please try again.");
+      setToast({
+        message: "Unable to delete employee. Please try again.",
+        variant: "error",
+      });
     }
     setEmployeePendingDeleteCode("");
   };
@@ -106,7 +136,10 @@ function EmployeesPage() {
               onClick={() => {
                 resetEmployees();
                 handleClearFilters();
-                setFeedbackMessage("Employee data reset to initial dataset.");
+                setToast({
+                  message: "Employee data reset to initial dataset.",
+                  variant: "info",
+                });
               }}
               data-testid="employees-reset-button"
             >
@@ -118,19 +151,6 @@ function EmployeesPage() {
           </div>
         }
       />
-      {feedbackMessage ? (
-        <div className="card feedback-banner" data-testid="employees-feedback-banner">
-          <p>{feedbackMessage}</p>
-          <button
-            type="button"
-            className="button button-secondary button-small"
-            onClick={() => setFeedbackMessage("")}
-            data-testid="employees-feedback-dismiss-button"
-          >
-            Dismiss
-          </button>
-        </div>
-      ) : null}
       <EmployeeFilters
         searchTerm={searchTerm}
         departmentFilter={departmentFilter}
@@ -160,6 +180,7 @@ function EmployeesPage() {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
+      <ToastMessage toast={toast} onClose={() => setToast(null)} />
     </section>
   );
 }

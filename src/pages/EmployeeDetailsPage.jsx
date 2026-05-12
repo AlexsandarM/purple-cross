@@ -1,16 +1,45 @@
-import { generatePath, Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { generatePath, Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import EmployeeDetailsCard from "../components/employees/EmployeeDetailsCard";
 import PageHeader from "../components/common/PageHeader";
+import ToastMessage from "../components/common/ToastMessage";
 import { useEmployees } from "../hooks/useEmployees";
 import { APP_PATHS } from "../routes/paths";
 
 function EmployeeDetailsPage() {
   const { code } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { getEmployeeByCode } = useEmployees();
+  const [toast, setToast] = useState(null);
   const employee = code ? getEmployeeByCode(code) : null;
   const editPath = employee
     ? generatePath(APP_PATHS.editEmployee, { code: employee.code })
     : APP_PATHS.employees;
+
+  useEffect(() => {
+    const locationToast = location.state?.toast;
+    if (!locationToast?.message) {
+      return;
+    }
+
+    setToast(locationToast);
+    navigate(location.pathname, { replace: true, state: {} });
+  }, [location.pathname, location.state, navigate]);
+
+  useEffect(() => {
+    if (!toast) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setToast(null);
+    }, 3500);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [toast]);
 
   if (!employee) {
     return (
@@ -58,6 +87,7 @@ function EmployeeDetailsPage() {
           Edit
         </Link>
       </div>
+      <ToastMessage toast={toast} onClose={() => setToast(null)} />
     </section>
   );
 }

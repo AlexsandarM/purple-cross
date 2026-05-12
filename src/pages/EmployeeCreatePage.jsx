@@ -28,7 +28,14 @@ function EmployeeCreatePage() {
     }
 
     setSubmitError("");
-    navigate(APP_PATHS.employees);
+    navigate(APP_PATHS.employees, {
+      state: {
+        toast: {
+          message: `${normalized.fullName} was created successfully.`,
+          variant: "success",
+        },
+      },
+    });
     return {};
   };
 
