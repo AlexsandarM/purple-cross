@@ -1,10 +1,15 @@
 import { Link } from "react-router-dom";
+import EmployeeTable from "../components/employees/EmployeeTable";
 import PageHeader from "../components/common/PageHeader";
 import { useEmployees } from "../hooks/useEmployees";
 import { APP_PATHS } from "../routes/paths";
 
 function EmployeesPage() {
-  const { employees, resetEmployees } = useEmployees();
+  const { employees, deleteEmployee, resetEmployees } = useEmployees();
+
+  const handleDeleteEmployee = (code) => {
+    deleteEmployee(code);
+  };
 
   return (
     <section className="page">
@@ -27,12 +32,7 @@ function EmployeesPage() {
           </div>
         }
       />
-      <div className="card" data-testid="employees-table-placeholder">
-        Employee grid will be implemented in `feature/employee-table`.
-        <p>
-          Initial dataset loaded: <strong>{employees.length}</strong> employees.
-        </p>
-      </div>
+      <EmployeeTable employees={employees} onDelete={handleDeleteEmployee} />
     </section>
   );
 }
