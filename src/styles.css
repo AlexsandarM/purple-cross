@@ -228,6 +228,10 @@ a {
   font-size: 0.78rem;
 }
 
+.employee-form-note {
+  margin: -0.35rem 0 0;
+}
+
 .form-error-banner {
   margin: 0;
   color: #991b1b;
