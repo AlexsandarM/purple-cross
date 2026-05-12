@@ -189,6 +189,11 @@ a {
   outline-offset: 1px;
 }
 
+.input:disabled {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
 .employee-filters-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -216,6 +221,11 @@ a {
   color: #b91c1c;
   font-size: 0.78rem;
   font-weight: 600;
+}
+
+.field-help {
+  color: #6b7280;
+  font-size: 0.78rem;
 }
 
 .form-error-banner {

@@ -11,15 +11,18 @@ export function normalizeEmployeeInput(values) {
   };
 }
 
-export function validateEmployee(values, existingEmployees) {
+export function validateEmployee(values, existingEmployees, options = {}) {
   const errors = {};
   const normalized = normalizeEmployeeInput(values);
+  const normalizedCurrentCode = (options.currentCode ?? "").trim().toLowerCase();
 
   if (!normalized.code) {
     errors.code = "Code is required.";
   } else {
     const duplicateCode = existingEmployees.some(
-      (employee) => employee.code.toLowerCase() === normalized.code.toLowerCase()
+      (employee) =>
+        employee.code.toLowerCase() === normalized.code.toLowerCase() &&
+        employee.code.toLowerCase() !== normalizedCurrentCode
     );
 
     if (duplicateCode) {
