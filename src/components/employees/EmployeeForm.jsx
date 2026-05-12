@@ -17,6 +17,7 @@ function EmployeeForm({
   formError = "",
   submitTestId = "employee-form-submit-button",
   disableCodeField = false,
+  codeReadOnlyMessage = "",
 }) {
   const [values, setValues] = useState({
     ...EMPTY_VALUES,
@@ -67,6 +68,11 @@ function EmployeeForm({
           {errors.code ? (
             <small className="field-error" data-testid="employee-code-error">
               {errors.code}
+            </small>
+          ) : null}
+          {!errors.code && disableCodeField && codeReadOnlyMessage ? (
+            <small className="field-help" data-testid="employee-code-help">
+              {codeReadOnlyMessage}
             </small>
           ) : null}
         </label>

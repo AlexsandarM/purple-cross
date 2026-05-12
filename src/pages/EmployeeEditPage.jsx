@@ -1,4 +1,5 @@
 import { generatePath, Link, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 import EmployeeForm from "../components/employees/EmployeeForm";
 import PageHeader from "../components/common/PageHeader";
 import { useEmployees } from "../hooks/useEmployees";
@@ -9,6 +10,7 @@ function EmployeeEditPage() {
   const { code } = useParams();
   const navigate = useNavigate();
   const { employees, getEmployeeByCode, updateEmployee } = useEmployees();
+  const [submitError, setSubmitError] = useState("");
   const employee = code ? getEmployeeByCode(code) : null;
 
   if (!employee) {
@@ -46,16 +48,19 @@ function EmployeeEditPage() {
     });
 
     if (Object.keys(errors).length > 0) {
+      setSubmitError("");
       return { errors };
     }
 
     const updated = updateEmployee(employee.code, normalized);
     if (!updated) {
+      setSubmitError("Unable to save changes. Please try again.");
       return {
         errors: { code: "Unable to update employee. Please try again." },
       };
     }
 
+    setSubmitError("");
     navigate(detailsPath);
     return {};
   };
@@ -73,6 +78,8 @@ function EmployeeEditPage() {
         submitLabel="Save Changes"
         submitTestId="edit-employee-save-button"
         disableCodeField
+        codeReadOnlyMessage="Code is locked to prevent identity conflicts."
+        formError={submitError}
       />
     </section>
   );
