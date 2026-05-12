@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import PageHeader from "../components/common/PageHeader";
 import employees from "../data/employees.json";
+import { APP_PATHS } from "../routes/paths";
 
 function EmployeesPage() {
   return (
@@ -9,7 +10,7 @@ function EmployeesPage() {
         title="Employee Management"
         subtitle="Centralized employee directory and actions."
         actions={
-          <Link className="button button-primary" to="/employees/new" data-testid="employees-create-button">
+          <Link className="button button-primary" to={APP_PATHS.createEmployee} data-testid="employees-create-button">
             Create Employee
           </Link>
         }

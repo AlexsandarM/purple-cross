@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import PageHeader from "../components/common/PageHeader";
+import { APP_PATHS } from "../routes/paths";
 
 function EmployeeEditPage() {
   const { code } = useParams();
@@ -10,7 +11,7 @@ function EmployeeEditPage() {
       <div className="card" data-testid="edit-employee-form-placeholder">
         Edit form placeholder.
       </div>
-      <Link to="/employees" className="button button-secondary" data-testid="edit-employee-back-button">
+      <Link to={APP_PATHS.employees} className="button button-secondary" data-testid="edit-employee-back-button">
         Back to Employees
       </Link>
     </section>

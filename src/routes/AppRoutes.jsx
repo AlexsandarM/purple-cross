@@ -5,16 +5,17 @@ import EmployeeDetailsPage from "../pages/EmployeeDetailsPage";
 import EmployeeEditPage from "../pages/EmployeeEditPage";
 import EmployeesPage from "../pages/EmployeesPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import { APP_PATHS } from "./paths";
 
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/employees" replace />} />
+      <Route path={APP_PATHS.home} element={<Navigate to={APP_PATHS.employees} replace />} />
       <Route element={<AppLayout />}>
-        <Route path="/employees" element={<EmployeesPage />} />
-        <Route path="/employees/new" element={<EmployeeCreatePage />} />
-        <Route path="/employees/:code" element={<EmployeeDetailsPage />} />
-        <Route path="/employees/:code/edit" element={<EmployeeEditPage />} />
+        <Route path={APP_PATHS.employees} element={<EmployeesPage />} />
+        <Route path={APP_PATHS.createEmployee} element={<EmployeeCreatePage />} />
+        <Route path={APP_PATHS.employeeDetails} element={<EmployeeDetailsPage />} />
+        <Route path={APP_PATHS.editEmployee} element={<EmployeeEditPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
