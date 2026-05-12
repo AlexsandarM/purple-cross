@@ -201,6 +201,32 @@ a {
   justify-content: flex-end;
 }
 
+.employee-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.employee-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1.1rem;
+}
+
+.field-error {
+  color: #b91c1c;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.form-error-banner {
+  margin: 0;
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+}
+
 .table-scroll {
   overflow-x: auto;
 }
@@ -319,6 +345,10 @@ a {
   }
 
   .employee-filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-form-grid {
     grid-template-columns: 1fr;
   }
 
