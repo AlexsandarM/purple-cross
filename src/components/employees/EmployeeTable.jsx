@@ -44,7 +44,7 @@ function getNextSortState(current, column) {
   };
 }
 
-function EmployeeTable({ employees, onDelete }) {
+function EmployeeTable({ employees, onDelete, emptyStateMessage = "No employees available." }) {
   const [sortState, setSortState] = useState(DEFAULT_SORT);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -80,7 +80,7 @@ function EmployeeTable({ employees, onDelete }) {
   if (!employees.length) {
     return (
       <div className="card" data-testid="employees-empty-state">
-        No employees available.
+        {emptyStateMessage}
       </div>
     );
   }
